@@ -10,10 +10,16 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	nsqutil "github.com/wildanpurnomo/nsq-ayayaclap/smtp-service/nsq"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	consumer, err := nsqutil.CreateNewConsumer()
 	if err != nil {
 		log.Fatal(err)
@@ -32,7 +38,7 @@ func main() {
 	})
 
 	srv := &http.Server{
-		Addr:    ":8082",
+		Addr:    ":8081",
 		Handler: router,
 	}
 

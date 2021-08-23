@@ -54,7 +54,7 @@ func CreateNewConsumer() (*nsq.Consumer, error) {
 
 	consumer.AddHandler(&MessageHandler{})
 
-	err = consumer.ConnectToNSQLookupd("localhost:4161")
+	err = consumer.ConnectToNSQLookupd("127.0.0.1:4161")
 	if err != nil {
 		return nil, err
 	}

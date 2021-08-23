@@ -17,6 +17,7 @@ import (
 	gqlschema "github.com/wildanpurnomo/nsq-ayayaclap/main-service/gql/schema"
 	"github.com/wildanpurnomo/nsq-ayayaclap/main-service/libs"
 	nsqutil "github.com/wildanpurnomo/nsq-ayayaclap/main-service/nsq"
+	restcontrollers "github.com/wildanpurnomo/nsq-ayayaclap/main-service/rest-controllers"
 )
 
 func main() {
@@ -57,6 +58,7 @@ func main() {
 
 	r.GET("/gql", gqlHandlerFunc)
 	r.POST("/gql", gqlHandlerFunc)
+	r.GET("/api/user/email-confirmation", restcontrollers.ConfirmUserEmail)
 
 	srv := &http.Server{
 		Addr:    ":8080",

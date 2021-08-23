@@ -37,7 +37,7 @@ func InjectProducer(producer *nsq.Producer) {
 func CreateNewProducer() (*nsq.Producer, error) {
 	config := nsq.NewConfig()
 
-	producer, err := nsq.NewProducer("localhost:4150", config)
+	producer, err := nsq.NewProducer("127.0.0.1:4150", config)
 	if err != nil {
 		return nil, err
 	}
