@@ -1,0 +1,1 @@
+typical main service via gql request

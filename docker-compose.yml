@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+  nsqlookupd:
+    image: nsqio/nsq
+    command: /nsqlookupd
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+
+  nsqd:
+    image: nsqio/nsq
+    command: /nsqd --lookupd-tcp-address=nsqlookupd:4160 --broadcast-address=host.docker.internal #change to localhost if you're in mac/linux
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+
+  nsqadmin:
+    image: nsqio/nsq
+    command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
+    depends_on:
+      - nsqlookupd  
+    ports:
+      - "4171:4171"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+  postgresdb:
+    image: postgres:latest
+    environment:
+        - POSTGRES_USER=${POSTGRES_USER}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - POSTGRES_DB=${POSTGRES_DBNAME}
+        - POSTGRES_HOST=${POSTGRES_HOST}
+        - POSTGRES_PORT=${POSTGRES_PORT}
+        - POSTGRES_SSLMODE=${POSTGRES_SSLMODE} 
+        - POSTGRES_TIMEZONE=${POSTGRES_TIMEZONE}
+    ports:
+        - 5432:5432
+    volumes:
+        - database_postgres:/var/lib/postgresql/data
+    networks:
+        - main_service_net
+
+  mainservice:
+    build: main-service
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    depends_on: 
+      - postgresdb
+  
+  smtpservice:
+    build: smtp-service
+    ports: 
+      - "8081:8081"
+    restart: on-failure
+  
+volumes:
+    database_postgres:
+
+networks:
+    main_service_net:
+        driver: bridge
+    
+  

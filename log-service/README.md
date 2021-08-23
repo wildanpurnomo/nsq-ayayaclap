@@ -1,0 +1,1 @@
+subscribe to various events and log them into mongodb
