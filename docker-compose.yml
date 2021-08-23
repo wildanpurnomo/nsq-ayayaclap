@@ -9,7 +9,7 @@ services:
 
   nsqd:
     image: nsqio/nsq
-    command: /nsqd --lookupd-tcp-address=nsqlookupd:4160 --broadcast-address=host.docker.internal #change to localhost if you're in mac/linux
+    command: /nsqd --lookupd-tcp-address=nsqlookupd:4160 #--broadcast-address=host.docker.internal append this command if you want to run in your local physical machine(change host.docker.internal with localhost if you're on linux / mac)
     depends_on:
       - nsqlookupd
     ports:
