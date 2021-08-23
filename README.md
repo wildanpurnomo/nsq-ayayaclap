@@ -4,4 +4,4 @@ in case you're wondering, nsq is a messaging queue platform. it is similar to Ra
 
 needless to say, this ain't finished yet.
 
-oh I forgot, I used mailhog as smtp trapper (by default runs on localhost:1025) you can get it easily via docker ezclap.
+oh I forgot, I used mailhog as smtp trapper (by default runs on port 1025) you can get it easily via docker ezclap.
