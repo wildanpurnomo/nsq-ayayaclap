@@ -1,6 +1,7 @@
 package nsqutil
 
 import (
+	"log"
 	"time"
 
 	"github.com/nsqio/go-nsq"
@@ -49,4 +50,5 @@ func StopConsumers() {
 	for _, consumer := range LoggerConsumerWrapper.nsqConsumers {
 		consumer.Stop()
 	}
+	log.Println("Consumers are stopped")
 }

@@ -65,6 +65,7 @@ func main() {
 	log.Println("Shutting down gracefully")
 
 	dbrepos.DisconnectDBClient()
+	nsqutil.StopConsumers()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -72,5 +73,5 @@ func main() {
 		log.Fatal("Server is forced into shutdown: ", err)
 	}
 
-	log.Panicln("Server is exiting")
+	log.Println("Server is exiting")
 }
