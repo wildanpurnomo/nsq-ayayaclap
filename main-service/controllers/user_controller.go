@@ -20,6 +20,12 @@ func ConfirmNewUser(email string) error {
 		return err
 	}
 
+	event := nsqutil.Event{
+		EventName: "confirm_new_user",
+		Data:      email,
+	}
+	nsqutil.NsqPublisher.Publish("confirm_new_user", event)
+
 	return nil
 }
 
@@ -54,7 +60,7 @@ func RegisterNewUser(username string, email string, password string) (models.Use
 		EventName: "register_new_user",
 		Data:      input.Email,
 	}
-	nsqutil.NsqPublisher.Publish("test", event)
+	nsqutil.NsqPublisher.Publish("register_new_user", event)
 
 	return input, nil
 }

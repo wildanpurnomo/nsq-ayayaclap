@@ -47,7 +47,7 @@ func CreateNewConsumer() (*nsq.Consumer, error) {
 	config.MaxRequeueDelay = time.Second * 900
 	config.DefaultRequeueDelay = time.Second * 0
 
-	consumer, err := nsq.NewConsumer("test", "smtp", config)
+	consumer, err := nsq.NewConsumer("register_new_user", "smtp", config)
 	if err != nil {
 		return nil, err
 	}

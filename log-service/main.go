@@ -29,9 +29,14 @@ func main() {
 	dbrepos.ConnectDBClient()
 
 	userRegConsumer, err := nsqutil.CreateNewConsumer(
-		"test",
-		"user_registration",
+		"register_new_user",
+		"logger",
 		&nsqutil.UserRegistrationHandler{},
+	)
+	userConfirmConsumer, err := nsqutil.CreateNewConsumer(
+		"confirm_new_user",
+		"logger",
+		&nsqutil.UserConfirmationHandler{},
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -39,6 +44,7 @@ func main() {
 
 	nsqutil.InitLoggerConsumers()
 	nsqutil.AppendConsumer(userRegConsumer)
+	nsqutil.AppendConsumer(userConfirmConsumer)
 
 	if os.Getenv("ENV_SCHEMA") == "https" {
 		gin.SetMode(gin.ReleaseMode)
