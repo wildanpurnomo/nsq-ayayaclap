@@ -82,6 +82,7 @@ func main() {
 	// do something here I guess
 	maindb.PostgresDB.Close()
 	repositories.Repo.CloseDB()
+	nsqutil.StopProducer()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

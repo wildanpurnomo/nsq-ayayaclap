@@ -44,3 +44,7 @@ func CreateNewProducer() (*nsq.Producer, error) {
 
 	return producer, nil
 }
+
+func StopProducer() {
+	NsqPublisher.Producer.Stop()
+}
