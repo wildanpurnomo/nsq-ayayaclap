@@ -2,6 +2,8 @@ package appcontrollers
 
 import (
 	"errors"
+	"log"
+	"strings"
 
 	"github.com/wildanpurnomo/nsq-ayayaclap/main-service/db/models"
 	"github.com/wildanpurnomo/nsq-ayayaclap/main-service/db/repositories"
@@ -29,7 +31,28 @@ func ConfirmNewUser(email string) error {
 	return nil
 }
 
-func RegisterNewUser(username string, email string, password string) (models.User, error) {
+func Login(identifier string, password string) (models.User, error) {
+	var user models.User
+	if err := repositories.Repo.GetVerifiedUser(identifier, &user); err != nil {
+		log.Println(err.Error())
+		return models.User{}, errors.New("Invalid credentials or unverified")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return models.User{}, errors.New("Invalid credentials or unverified")
+	}
+
+	event := nsqutil.Event{
+		EventName: "user_login",
+		Data:      user.Email,
+	}
+	nsqutil.NsqPublisher.Publish("user_login", event)
+
+	user.Password = ""
+	return user, nil
+}
+
+func Register(username string, email string, password string) (models.User, error) {
 	if !libs.ValidateUsername(username) {
 		return models.User{}, errors.New("Invalid username")
 	}
@@ -43,10 +66,10 @@ func RegisterNewUser(username string, email string, password string) (models.Use
 	}
 
 	var input models.User
-	input.Username = username
-	input.Email = email
+	input.Username = strings.TrimSpace(username)
+	input.Email = strings.TrimSpace(email)
 
-	hashed, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.MinCost)
+	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
 		return models.User{}, errors.New("monkaW")
 	}

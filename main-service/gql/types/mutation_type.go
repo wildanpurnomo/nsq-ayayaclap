@@ -26,6 +26,19 @@ var (
 					},
 					Resolve: gqlresolvers.RegisterResolver,
 				},
+				"login": &graphql.Field{
+					Type:        UserType,
+					Description: "Log a user in",
+					Args: graphql.FieldConfigArgument{
+						"identifier": &graphql.ArgumentConfig{
+							Type: graphql.NewNonNull(graphql.String),
+						},
+						"password": &graphql.ArgumentConfig{
+							Type: graphql.NewNonNull(graphql.String),
+						},
+					},
+					Resolve: gqlresolvers.LoginResolver,
+				},
 			},
 		},
 	)

@@ -42,6 +42,7 @@ func main() {
 	r := gin.Default()
 
 	r.Use(libs.CORSMiddleware())
+	r.Use(libs.AuthMiddleware())
 
 	graphqlSchema, err := gqlschema.InitGQLSchema()
 	if err != nil {

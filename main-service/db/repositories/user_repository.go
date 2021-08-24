@@ -31,12 +31,26 @@ func (r *Repository) ConfirmUserRegistration(email string) error {
 }
 
 func (r *Repository) GetUnverifiedUser(emailInput string, model *models.User) error {
-	stmt, err := r.db.Prepare("SELECT username, email, is_email_verified FROM users WHERE email = $1 AND is_email_verified = FALSE")
+	stmt, err := r.db.Prepare("SELECT username, email, is_email_verified FROM users WHERE email = $1 AND is_email_verified = FALSE LIMIT 1")
 	if err != nil {
 		return err
 	}
 
 	err = stmt.QueryRow(emailInput).Scan(&model.Username, &model.Email, &model.IsEmailVerified)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Repository) GetVerifiedUser(input string, model *models.User) error {
+	stmt, err := r.db.Prepare("SELECT username, email, password, is_email_verified FROM users WHERE ((username = $1 OR email = $1) AND is_email_verified = TRUE) LIMIT 1")
+	if err != nil {
+		return err
+	}
+
+	err = stmt.QueryRow(input).Scan(&model.Username, &model.Email, &model.Password, &model.IsEmailVerified)
 	if err != nil {
 		return err
 	}

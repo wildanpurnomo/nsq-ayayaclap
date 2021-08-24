@@ -2,6 +2,7 @@ package nsqutil
 
 import (
 	"encoding/json"
+	"log"
 
 	"github.com/nsqio/go-nsq"
 )
@@ -47,4 +48,5 @@ func CreateNewProducer() (*nsq.Producer, error) {
 
 func StopProducer() {
 	NsqPublisher.Producer.Stop()
+	log.Println("Main service producer is stopping")
 }

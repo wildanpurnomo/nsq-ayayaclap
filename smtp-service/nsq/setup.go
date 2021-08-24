@@ -3,6 +3,7 @@ package nsqutil
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/nsqio/go-nsq"
@@ -64,4 +65,5 @@ func CreateNewConsumer() (*nsq.Consumer, error) {
 
 func StopConsumer() {
 	SMTPConsumer.nsqConsumer.Stop()
+	log.Println("SMTP Consumers are stopping")
 }
